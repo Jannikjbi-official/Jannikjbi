@@ -8,6 +8,7 @@ import {
   faHandshake,
   faShareNodes,
   faRotate,
+  faShieldHalved,
   faTags,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -34,6 +35,7 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { href: "/admin/about", label: "Über mich", icon: faUser, group: "Website" },
   { href: "/admin/website", label: "Website", icon: faGlobe, group: "Website" },
   { href: "/admin/settings", label: "Settings", icon: faGear, group: "Website" },
+  { href: "/admin/account", label: "Zugang", icon: faShieldHalved, group: "Website" },
 ];
 
 /** Breadcrumb label for a path, falling back to the last segment. */
