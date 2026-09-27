@@ -7,14 +7,30 @@ import { getAuth } from "./auth";
 import { getAuthMongo } from "./mongo";
 
 /**
- * The single Discord account that owns this CMS.
+ * Who owns this CMS.
  *
- * Authorization is decided here, on the server, against the `account`
- * collection — never from a client-supplied value, a cookie claim, or the
- * session object alone.
+ * Authorization is decided here, on the server, against the database — never
+ * from a client-supplied value, a cookie claim, or the session object alone.
+ *
+ * There are three ways to be authorized, checked in this order:
+ *
+ *  1. `ADMIN_USER_IDS` — Better Auth user ids. This is the primary rule and the
+ *     most stable one: the user id does not change when providers are linked or
+ *     unlinked, so the owner keeps access regardless of how they signed in.
+ *  2. `ADMIN_DISCORD_ID` — a Discord account id. Useful for bootstrapping the
+ *     very first login, before a user id exists to put in the list.
+ *  3. `ADMIN_TWITCH_IDS` — explicitly allowlisted Twitch account ids.
+ *
+ * Whichever matched, the decision is always re-derived per request.
  */
-export const ADMIN_DISCORD_ID =
-  process.env.ADMIN_DISCORD_ID?.trim() || "1276986070675882006";
+function adminUserIds(): string[] {
+  return (process.env.ADMIN_USER_IDS ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+}
+
+export const ADMIN_DISCORD_ID = process.env.ADMIN_DISCORD_ID?.trim() || "";
 
 /**
  * Optional extra Twitch user ids. Empty by default: a Twitch login then only
@@ -36,8 +52,8 @@ export type AdminIdentity = {
   name: string | null;
   email: string | null;
   image: string | null;
-  /** Which linked account granted access. */
-  via: "discord" | "twitch";
+  /** What granted access. */
+  via: "user" | "discord" | "twitch";
 };
 
 type AccountRow = {
@@ -63,6 +79,13 @@ export async function getAdminIdentity(): Promise<AdminIdentity | null> {
     if ((session.user as { banned?: boolean | null }).banned) return null;
 
     const userId = session.user.id;
+
+    // 1. The owner's own user id. Checked first and without a database round
+    //    trip, so linking or unlinking a provider can never lock them out.
+    if (adminUserIds().includes(userId)) {
+      return identityFrom(session.user, "user");
+    }
+
     const { db } = getAuthMongo();
 
     // `account.userId` references `user.id`, which the Mongo adapter stores as
@@ -82,7 +105,10 @@ export async function getAdminIdentity(): Promise<AdminIdentity | null> {
       accountId: typeof row.accountId === "string" ? row.accountId : String(row.accountId ?? ""),
     }));
 
-    if (linked.some((a) => a.providerId === "discord" && a.accountId === ADMIN_DISCORD_ID)) {
+    if (
+      ADMIN_DISCORD_ID &&
+      linked.some((a) => a.providerId === "discord" && a.accountId === ADMIN_DISCORD_ID)
+    ) {
       return identityFrom(session.user, "discord");
     }
 
