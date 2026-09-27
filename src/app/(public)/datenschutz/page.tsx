@@ -148,15 +148,23 @@ export default async function DatenschutzPage() {
               <span className="font-mono text-ink-200">{INSTANT_GAMING.affiliateId}</span>. Für
               Sie entstehen dadurch keine Mehrkosten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f
               DSGVO (berechtigtes Interesse an der Finanzierung des Angebots). Informationen
-              zur Datenverarbeitung durch den Anbieter finden Sie in dessen eigener
-              Datenschutzerklärung unter{" "}
+              zur Datenverarbeitung durch den Anbieter finden Sie in dessen{" "}
               <a
-                href="https://www.instant-gaming.com/de/page-privacy/"
+                href="https://www.instant-gaming.com/de/privatsphare/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-ink-100 underline underline-offset-4 transition-colors hover:text-gold-400"
               >
-                instant-gaming.com
+                Datenschutzerklärung
+              </a>{" "}
+              sowie in den{" "}
+              <a
+                href="https://www.instant-gaming.com/de/allgemeine-geschaftsbedingungen/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink-100 underline underline-offset-4 transition-colors hover:text-gold-400"
+              >
+                Allgemeinen Geschäftsbedingungen
               </a>
               .
             </p>

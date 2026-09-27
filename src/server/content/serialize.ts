@@ -223,6 +223,7 @@ export function toSiteSettingsDTO(doc: Lean | null): SiteSettingsDTO {
       contentDbId: nullableStr(notion.contentDbId) ?? process.env.NOTION_CONTENT_DB_ID ?? null,
       channelsDbId: nullableStr(notion.channelsDbId) ?? process.env.NOTION_CHANNELS_DB_ID ?? null,
       sponsorsDbId: nullableStr(notion.sponsorsDbId) ?? process.env.NOTION_SPONSORS_DB_ID ?? null,
+      tasksDbId: nullableStr(notion.tasksDbId) ?? process.env.NOTION_TASKS_DB_ID ?? null,
       modes: {
         channels: syncMode(notionModes.channels),
         streams: syncMode(notionModes.streams),

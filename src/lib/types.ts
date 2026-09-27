@@ -152,6 +152,7 @@ export type SiteSettingsDTO = {
     contentDbId: string | null;
     channelsDbId: string | null;
     sponsorsDbId: string | null;
+    tasksDbId: string | null;
     modes: Record<NotionResource, NotionSyncMode>;
     lastSyncAt: string | null;
     lastSyncOk: boolean | null;

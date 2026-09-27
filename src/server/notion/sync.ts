@@ -42,6 +42,7 @@ export type NotionConfig = {
   contentDbId: string | null;
   channelsDbId: string | null;
   sponsorsDbId: string | null;
+  tasksDbId: string | null;
   modes: Record<NotionResource, NotionSyncMode>;
 };
 
@@ -57,6 +58,7 @@ export async function getNotionConfig(): Promise<NotionConfig> {
     contentDbId: notion.contentDbId || process.env.NOTION_CONTENT_DB_ID || null,
     channelsDbId: notion.channelsDbId || process.env.NOTION_CHANNELS_DB_ID || null,
     sponsorsDbId: notion.sponsorsDbId || process.env.NOTION_SPONSORS_DB_ID || null,
+    tasksDbId: notion.tasksDbId || process.env.NOTION_TASKS_DB_ID || null,
     modes: notion.modes,
   };
 }

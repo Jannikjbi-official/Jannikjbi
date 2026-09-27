@@ -110,18 +110,46 @@ type QueryResponse = {
 /* Calls                                                                      */
 /* -------------------------------------------------------------------------- */
 
-/** Reads a database's metadata — used to verify a configured id. */
-export async function retrieveDatabase(
-  databaseId: string,
-): Promise<{ id: string; title: string }> {
-  const data = await request<{ id: string; title?: NotionRichText[] }>(
-    `/databases/${normalizeId(databaseId)}`,
-  );
+/** A property definition as Notion reports it in the database schema. */
+export type NotionPropertySchema = {
+  id: string;
+  name: string;
+  type: string;
+  select?: { options?: Array<{ name: string; color?: string }> };
+  multi_select?: { options?: Array<{ name: string; color?: string }> };
+  status?: { options?: Array<{ name: string; color?: string }> };
+  relation?: { database_id?: string };
+};
+
+/** Reads a database's metadata and schema. */
+export async function retrieveDatabase(databaseId: string): Promise<{
+  id: string;
+  title: string;
+  properties: Record<string, NotionPropertySchema>;
+}> {
+  const data = await request<{
+    id: string;
+    title?: NotionRichText[];
+    properties?: Record<string, NotionPropertySchema>;
+  }>(`/databases/${normalizeId(databaseId)}`);
 
   return {
     id: data.id,
     title: data.title?.map((part) => part.plain_text ?? "").join("").trim() || "(ohne Titel)",
+    properties: data.properties ?? {},
   };
+}
+
+/**
+ * Archives a page. Notion has no hard delete through the API; archiving is what
+ * the "Delete" action in the Notion UI does too, so the page stays restorable
+ * from the trash.
+ */
+export async function archivePage(pageId: string): Promise<void> {
+  await request(`/pages/${normalizeId(pageId)}`, {
+    method: "PATCH",
+    body: { archived: true },
+  });
 }
 
 /** Reads every non-archived page of a database, following pagination. */

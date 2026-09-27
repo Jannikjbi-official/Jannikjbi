@@ -209,6 +209,7 @@ export const siteSettingsInputSchema = z.object({
       contentDbId: emptyToUndefined(z.string().trim().max(120)),
       channelsDbId: emptyToUndefined(z.string().trim().max(120)),
       sponsorsDbId: emptyToUndefined(z.string().trim().max(120)),
+      tasksDbId: emptyToUndefined(z.string().trim().max(120)),
       modes: z
         .object({
           channels: z.enum(NOTION_SYNC_MODES).default("off"),

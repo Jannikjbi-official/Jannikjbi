@@ -9,6 +9,7 @@ import {
   faShareNodes,
   faRotate,
   faShieldHalved,
+  faTableList,
   faTags,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -31,7 +32,8 @@ export const ADMIN_NAV: AdminNavItem[] = [
   { href: "/admin/projects", label: "Projekte", icon: faDiagramProject, group: "Inhalte" },
   { href: "/admin/social", label: "Social Media", icon: faShareNodes, group: "Inhalte" },
   { href: "/admin/partners", label: "Partner", icon: faHandshake, group: "Inhalte" },
-  { href: "/admin/notion", label: "Creator Buddy", icon: faRotate, group: "Website" },
+  { href: "/admin/creator-buddy", label: "Creator Buddy", icon: faTableList, group: "Website" },
+  { href: "/admin/notion", label: "Synchronisierung", icon: faRotate, group: "Website" },
   { href: "/admin/about", label: "Über mich", icon: faUser, group: "Website" },
   { href: "/admin/website", label: "Website", icon: faGlobe, group: "Website" },
   { href: "/admin/settings", label: "Settings", icon: faGear, group: "Website" },

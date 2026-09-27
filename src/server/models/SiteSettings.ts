@@ -71,6 +71,7 @@ const siteSettingsSchema = new Schema(
           contentDbId: { type: String, trim: true, maxlength: 120 },
           channelsDbId: { type: String, trim: true, maxlength: 120 },
           sponsorsDbId: { type: String, trim: true, maxlength: 120 },
+          tasksDbId: { type: String, trim: true, maxlength: 120 },
           modes: {
             type: new Schema(
               {
