@@ -94,3 +94,34 @@ export const REVALIDATE = {
   partners: ["/", "/partners"],
   settings: ["/", "/about", "/games", "/content", "/projects", "/partners"],
 } as const;
+
+/**
+ * Constant-time string comparison for shared secrets, so a value cannot be
+ * guessed byte by byte from response timing.
+ */
+export function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+
+  let diff = 0;
+  for (let index = 0; index < a.length; index += 1) {
+    diff |= a.charCodeAt(index) ^ b.charCodeAt(index);
+  }
+
+  return diff === 0;
+}
+
+/**
+ * Reads a shared secret from an `Authorization: Bearer` header or a `secret`
+ * query parameter. Used by the routes that a scheduler or an operator calls
+ * without a session.
+ */
+export function readSecret(request: {
+  headers: { get(name: string): string | null };
+  nextUrl: { searchParams: URLSearchParams };
+}): string {
+  return (
+    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
+    request.nextUrl.searchParams.get("secret") ??
+    ""
+  );
+}

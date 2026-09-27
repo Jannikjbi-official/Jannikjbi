@@ -3,7 +3,14 @@ import type { NextRequest } from "next/server";
 import { SiteSettings } from "@/server/models";
 import { connectToDatabase } from "@/server/content/db";
 import { runSync } from "@/server/notion/sync";
-import { REVALIDATE, ok, revalidatePublic, serverError } from "@/server/api/respond";
+import {
+  REVALIDATE,
+  ok,
+  readSecret,
+  revalidatePublic,
+  serverError,
+  timingSafeEqual,
+} from "@/server/api/respond";
 import { notFoundResponse } from "@/server/auth/guard";
 
 export const dynamic = "force-dynamic";
@@ -20,12 +27,7 @@ export async function GET(request: NextRequest) {
   const secret = process.env.CRON_SECRET?.trim();
   if (!secret) return notFoundResponse();
 
-  const provided =
-    request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ??
-    request.nextUrl.searchParams.get("secret") ??
-    "";
-
-  if (!timingSafeEqual(provided, secret)) return notFoundResponse();
+  if (!timingSafeEqual(readSecret(request), secret)) return notFoundResponse();
 
   try {
     const report = await runSync();
@@ -46,16 +48,4 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return serverError("notion.cron", error);
   }
-}
-
-/** Constant-time comparison so the secret cannot be guessed byte by byte. */
-function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-
-  let diff = 0;
-  for (let index = 0; index < a.length; index += 1) {
-    diff |= a.charCodeAt(index) ^ b.charCodeAt(index);
-  }
-
-  return diff === 0;
 }
