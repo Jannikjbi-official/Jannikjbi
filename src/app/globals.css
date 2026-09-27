@@ -1,0 +1,287 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+/* ==========================================================================
+   Jannikjbi design tokens
+   Dark, high-contrast, one deliberate accent (gold/yellow).
+   ========================================================================== */
+
+@theme {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-display-family), var(--font-body), ui-sans-serif, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Menlo", monospace;
+
+  /* Neutral ink scale — the page is built almost entirely from these. */
+  --color-ink-950: #08080a;
+  --color-ink-900: #0b0b0e;
+  --color-ink-880: #0f0f13;
+  --color-ink-850: #131318;
+  --color-ink-800: #17171d;
+  --color-ink-750: #1c1c23;
+  --color-ink-700: #23232b;
+  --color-ink-650: #2b2b35;
+  --color-ink-600: #363642;
+  --color-ink-500: #4c4c5a;
+  --color-ink-400: #6b6b7b;
+  --color-ink-300: #9494a3;
+  --color-ink-200: #c2c2cd;
+  --color-ink-100: #e7e7ec;
+
+  /* The single accent. Used sparingly: CTAs, active states, key numbers. */
+  --color-gold-200: #ffeaa8;
+  --color-gold-300: #ffdf7d;
+  --color-gold-400: #ffd24a;
+  --color-gold-500: #ffc61a;
+  --color-gold-600: #eaad00;
+  --color-gold-700: #b98800;
+  --color-gold-800: #8a6500;
+
+  --radius-card: 1rem;
+
+  /* Motion — short and unobtrusive. */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* --------------------------------------------------------------------------
+   HeroUI theme mapping.
+   These are intentionally *unlayered* so they win over @heroui/styles'
+   `layer(theme)` defaults without needing !important.
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  --background: var(--color-ink-950);
+  --foreground: var(--color-ink-100);
+
+  --surface: var(--color-ink-880);
+  --surface-foreground: var(--color-ink-100);
+
+  --overlay: var(--color-ink-850);
+  --overlay-foreground: var(--color-ink-100);
+
+  --muted: var(--color-ink-300);
+  --scrollbar: var(--color-ink-700);
+
+  --default: var(--color-ink-800);
+  --default-foreground: var(--color-ink-100);
+
+  --accent: var(--color-gold-500);
+  --accent-foreground: #17130a;
+
+  --success: #34d399;
+  --success-foreground: #04150e;
+  --warning: var(--color-gold-400);
+  --warning-foreground: #17130a;
+  --danger: #f4544f;
+  --danger-foreground: #1a0606;
+
+  --segment: var(--color-ink-800);
+  --segment-foreground: var(--color-ink-100);
+
+  --border: var(--color-ink-700);
+  --separator: var(--color-ink-750);
+  --focus: var(--color-gold-500);
+  --link: var(--color-ink-100);
+
+  --border-width: 1px;
+  --radius: 0.625rem;
+  --ring-offset-width: 2px;
+
+  --surface-shadow: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --overlay-shadow: 0 16px 48px -12px rgb(0 0 0 / 0.75), 0 2px 8px rgb(0 0 0 / 0.5);
+  --field-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+
+  /* VTuber sizing — consumed by the footer + 404. Mobile first. */
+  --vtuber-height: 168px;
+  --vtuber-sink: 62px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vtuber-height: 232px;
+    --vtuber-sink: 84px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --vtuber-height: 330px;
+    --vtuber-sink: 118px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --vtuber-height: 390px;
+    --vtuber-sink: 138px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--color-ink-700);
+  }
+
+  html {
+    /* The VTuber leans past the footer edge; never let that add a scrollbar. */
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-100);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One consistent, clearly visible focus ring everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--color-gold-500);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-gold-500);
+    color: #17130a;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Project utilities
+   -------------------------------------------------------------------------- */
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 76rem;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .container-page {
+    padding-inline: 2rem;
+  }
+}
+
+/* Hairline that fades out at both ends — used as a section divider. */
+@utility rule-fade {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-ink-700) 15%,
+    var(--color-ink-700) 85%,
+    transparent
+  );
+}
+
+/* A restrained card surface. No glassmorphism, no glow. */
+@utility card-surface {
+  background-color: var(--color-ink-880);
+  border: 1px solid var(--color-ink-700);
+  border-radius: var(--radius-card);
+}
+
+/* Small uppercase label above section headings. */
+@utility eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-gold-500);
+}
+
+.animate-rise {
+  animation: rise 0.5s var(--ease-out-soft) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   The VTuber model.
+   Sits ON the top edge of a container: most of the body rises above the edge,
+   the legs sink into it. Purely decorative, so it never takes pointer events.
+   -------------------------------------------------------------------------- */
+.vtuber-perch {
+  position: absolute;
+  /* `bottom: 100% - sink` puts the image's feet `sink`px below the top edge. */
+  bottom: calc(100% - var(--vtuber-sink));
+  height: var(--vtuber-height);
+  width: auto;
+  max-width: 44vw;
+  object-fit: contain;
+  object-position: bottom center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  /* Grounds the figure so it reads as sitting on the edge rather than floating. */
+  filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.55));
+}
+
+/* Reserves the space the model occupies above the edge it sits on, so the
+   figure never covers the content of the preceding section. */
+.vtuber-spacer {
+  height: calc(var(--vtuber-height) - var(--vtuber-sink));
+  pointer-events: none;
+}
+
+.vtuber-perch--right {
+  right: clamp(0.75rem, 5vw, 5.5rem);
+}
+
+/* On the 404 the model stands next to the heading rather than on an edge. */
+.vtuber-standing {
+  height: clamp(200px, 38vh, 420px);
+  width: auto;
+  max-width: 60vw;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 18px 26px rgb(0 0 0 / 0.5));
+}
