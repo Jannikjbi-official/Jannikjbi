@@ -44,3 +44,15 @@ export async function POST(request: NextRequest) {
     return serverError("admin.seed", error);
   }
 }
+
+/**
+ * Next.js answers an undefined method with 405, which would reveal that this
+ * path exists. Every other verb is answered with the same plain 404 as POST.
+ */
+export async function GET() {
+  return notFoundResponse();
+}
+
+export const PUT = GET;
+export const PATCH = GET;
+export const DELETE = GET;
