@@ -26,7 +26,7 @@ export function SiteFooter({ settings, socialLinks }: SiteFooterProps) {
 
         {/* The right padding keeps the footer columns clear of the figure. */}
         <div className="container-page relative z-[2] pt-12 pb-10 sm:pt-14 lg:pt-16">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.4fr)_repeat(2,minmax(0,1fr))] lg:gap-12">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)_15rem] lg:gap-12">
             <div className="max-w-xs">
               <p className="font-display text-xl font-bold tracking-tight text-ink-100">
                 {settings.creatorName}
@@ -62,7 +62,7 @@ export function SiteFooter({ settings, socialLinks }: SiteFooterProps) {
               </ul>
             </nav>
 
-            <nav aria-label="Rechtliches" className="lg:pr-28">
+            <nav aria-label="Rechtliches">
               <h2 className="font-display text-xs font-semibold tracking-[0.16em] text-ink-400 uppercase">
                 Rechtliches
               </h2>
@@ -79,6 +79,8 @@ export function SiteFooter({ settings, socialLinks }: SiteFooterProps) {
                 ))}
               </ul>
             </nav>
+            {/* Reserves the column the figure's legs hang into. */}
+            <div className="hidden lg:block" aria-hidden />
           </div>
 
           <div className="mt-10 flex flex-col gap-3 border-t border-ink-800 pt-6 sm:flex-row sm:items-center sm:justify-between">

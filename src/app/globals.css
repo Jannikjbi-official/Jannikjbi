@@ -91,29 +91,33 @@
   --overlay-shadow: 0 16px 48px -12px rgb(0 0 0 / 0.75), 0 2px 8px rgb(0 0 0 / 0.5);
   --field-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
 
-  /* VTuber sizing — consumed by the footer + 404. Mobile first. */
-  --vtuber-height: 168px;
-  --vtuber-sink: 62px;
+  /* VTuber sizing — consumed by the footer + 404. Mobile first.
+     `--vtuber-sink` is ~52% of the height: that is where the hoodie ends on
+     this model, so the hip lands exactly on the footer edge and the legs hang
+     down into it. Sinking less makes the figure look stuck on rather than
+     seated. */
+  --vtuber-height: 172px;
+  --vtuber-sink: 90px;
 }
 
 @media (min-width: 640px) {
   :root {
-    --vtuber-height: 232px;
-    --vtuber-sink: 84px;
+    --vtuber-height: 244px;
+    --vtuber-sink: 127px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --vtuber-height: 330px;
-    --vtuber-sink: 118px;
+    --vtuber-height: 344px;
+    --vtuber-sink: 179px;
   }
 }
 
 @media (min-width: 1280px) {
   :root {
-    --vtuber-height: 390px;
-    --vtuber-sink: 138px;
+    --vtuber-height: 408px;
+    --vtuber-sink: 212px;
   }
 }
 
@@ -260,19 +264,24 @@
   pointer-events: none;
   user-select: none;
   z-index: 1;
-  /* Grounds the figure so it reads as sitting on the edge rather than floating. */
-  filter: drop-shadow(0 14px 18px rgb(0 0 0 / 0.55));
+  /* A tight contact shadow grounds the figure on the edge; a wide soft one
+     just makes it look like it is floating in front of the footer. */
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.65));
 }
 
 /* Reserves the space the model occupies above the edge it sits on, so the
    figure never covers the content of the preceding section. */
+/* Reserves most of the part that rises above the edge. Not all of it: the
+   model has transparent padding above the crown, and letting the very top
+   overlap the section above keeps the figure looking seated on the edge
+   instead of parked in an empty band. */
 .vtuber-spacer {
-  height: calc(var(--vtuber-height) - var(--vtuber-sink));
+  height: calc((var(--vtuber-height) - var(--vtuber-sink)) * 0.82);
   pointer-events: none;
 }
 
 .vtuber-perch--right {
-  right: clamp(0.75rem, 5vw, 5.5rem);
+  right: clamp(1rem, 6vw, 7rem);
 }
 
 /* On the 404 the model stands next to the heading rather than on an edge. */
