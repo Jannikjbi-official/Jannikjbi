@@ -250,36 +250,17 @@ Endpunkt. Der Vergleich des Secrets läuft in konstanter Zeit.
 ## Das VTuber-Modell
 
 Das Modell liegt unter `public/brand/jannikjbi-vtuber.webp` (941 × 1672, mit
-Alphakanal). Es wird **nicht** als Card oder normales Bild gezeigt, sondern
-sitzt auf der Oberkante des Footers:
+Alphakanal) und wird auf der 404-Seite neben der großen „404" gezeigt – in
+Originalgröße und ohne künstlichen Hintergrund. Die zugehörige Regel ist
+`.vtuber-standing` in `src/app/globals.css`.
 
-```css
-.vtuber-perch {
-  position: absolute;
-  bottom: calc(100% - var(--vtuber-sink)); /* Füße unter die Kante */
-  height: var(--vtuber-height);
-}
-```
+Im Footer wird es bewusst **nicht** mehr eingesetzt. Der frühere Aufbau ließ
+die Figur auf der Footer-Kante sitzen; das wirkte in der Praxis aufgesetzt und
+riss ein großes leeres Feld über den Footer, weil der überstehende Teil Platz
+reserviert brauchte.
 
-`bottom: calc(100% - sink)` setzt die Füße um `--vtuber-sink` **unter** die
-Footer-Oberkante: Der Körper ragt darüber hinaus, die Beine hängen in den
-Footer hinein. Ein `.vtuber-spacer` reserviert genau den überstehenden Teil, so
-dass der Abschnitt darüber nie verdeckt wird.
-
-| Breakpoint | Höhe | Eintauchtiefe |
-| --- | --- | --- |
-| Mobile | 168 px | 62 px |
-| ≥ 640 px | 232 px | 84 px |
-| ≥ 1024 px | 330 px | 118 px |
-| ≥ 1280 px | 390 px | 138 px |
-
-`pointer-events: none` stellt sicher, dass das Modell nie einen Klick auf die
-Footer-Navigation abfängt; `overflow-x: clip` auf `body` verhindert jede
-horizontale Scrollbar. Die Transparenz bleibt erhalten – kein künstlicher
-Hintergrund. Auf der 404-Seite steht dieselbe, unveränderte Grafik neben der
-großen „404“.
-
----
+Das runde Profilbild (`public/brand/jannikjbi-avatar.png`) trägt das Branding
+stattdessen im Header, im Hero und auf der Über-mich-Seite.
 
 ## Design-System
 
