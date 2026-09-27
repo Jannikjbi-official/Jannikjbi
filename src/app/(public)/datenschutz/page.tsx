@@ -58,17 +58,32 @@ export default async function DatenschutzPage() {
               2. Aufruf der Website (Server-Logfiles)
             </h2>
             <p className="mt-4">
-              Beim Aufruf dieser Website werden durch den Hosting-Anbieter technisch
-              notwendige Daten verarbeitet, insbesondere IP-Adresse, Datum und Uhrzeit des
-              Zugriffs, aufgerufene Seite, übertragene Datenmenge, Referrer und
-              Browser-/Betriebssystemangaben. Diese Verarbeitung ist für die Auslieferung der
-              Seite und die Sicherheit des Systems erforderlich. Rechtsgrundlage ist Art. 6
-              Abs. 1 lit. f DSGVO (berechtigtes Interesse am sicheren und stabilen Betrieb).
+              Diese Website wird gehostet von der{" "}
+              <strong className="text-ink-200">
+                Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA
+              </strong>
+              . Beim Aufruf werden durch den Hoster technisch notwendige Daten verarbeitet,
+              insbesondere IP-Adresse, Datum und Uhrzeit des Zugriffs, aufgerufene Seite,
+              übertragene Datenmenge, Referrer sowie Browser- und Betriebssystemangaben. Diese
+              Verarbeitung ist für die Auslieferung der Seite und die Sicherheit des Systems
+              erforderlich. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes
+              Interesse am sicheren und stabilen Betrieb).
             </p>
-            <p className="mt-3 rounded-lg border border-ink-700 bg-ink-880 p-4 text-sm text-ink-400">
-              Hinweis an den Betreiber: Ergänze hier Name und Sitz deines Hosting-Anbieters
-              sowie – falls einschlägig – den Hinweis auf einen Auftragsverarbeitungsvertrag
-              und die konkrete Speicherdauer der Logfiles.
+            <p className="mt-3">
+              Die serverseitige Ausführung dieser Website ist auf die Region Frankfurt am Main
+              (Deutschland) eingestellt. Da Vercel ein US-Unternehmen ist, kann ein Zugriff aus
+              den USA gleichwohl nicht ausgeschlossen werden. Mit Vercel besteht ein Vertrag
+              zur Auftragsverarbeitung; die Übermittlung wird auf die Standardvertragsklauseln
+              der EU-Kommission nach Art. 46 Abs. 2 lit. c DSGVO gestützt. Einzelheiten:{" "}
+              <a
+                href="https://vercel.com/legal/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink-100 underline underline-offset-4 transition-colors hover:text-gold-400"
+              >
+                vercel.com/legal/privacy-policy
+              </a>
+              .
             </p>
           </section>
 
@@ -90,10 +105,11 @@ export default async function DatenschutzPage() {
             </h2>
             <p className="mt-4">
               Die redaktionellen Inhalte dieser Website (Spiele, Genres, Streamplan, Projekte,
-              Social-Links, Partner und Website-Einstellungen) werden in einer
-              MongoDB-Datenbank gespeichert. Diese Inhalte enthalten keine personenbezogenen
-              Daten von Besucherinnen und Besuchern. Der Zugriff auf die Datenbank erfolgt
-              ausschließlich serverseitig.
+              Social-Links, Partner und Website-Einstellungen) werden in einer Datenbank bei{" "}
+              <strong className="text-ink-200">MongoDB Atlas</strong> (MongoDB, Inc.)
+              gespeichert. Diese Inhalte enthalten keine personenbezogenen Daten von
+              Besucherinnen und Besuchern. Der Zugriff auf die Datenbank erfolgt ausschließlich
+              serverseitig; aus dem Browser ist sie zu keinem Zeitpunkt erreichbar.
             </p>
           </section>
 

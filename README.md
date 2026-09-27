@@ -309,22 +309,43 @@ Screenreadern korrekt.
 
 ## Deployment
 
-1. Repository mit Vercel (oder einem anderen Node-Host) verbinden.
+Die Seite läuft auf Vercel im Team `voltfm`, Projekt **`jannikjbi-de`**,
+Production-Branch `main`, Region `fra1` (Frankfurt). Erreichbar unter
+`www.jannikjbi.de`; `jannikjbi.de` leitet per 308 dorthin.
+
+Für ein neues Deployment:
+
+1. Repository mit Vercel verbinden, Framework Next.js.
 2. Alle Variablen aus `.env.example` in den Projekteinstellungen setzen.
-3. In **MongoDB Atlas → Network Access** die IPs der Deployment-Umgebung
-   freigeben.
-4. `BETTER_AUTH_URL` und `NEXT_PUBLIC_SITE_URL` auf `https://jannikjbi.de`
-   setzen und die OAuth-Redirect-URLs entsprechend eintragen.
-5. Einmalig `npm run seed` gegen die Produktionsdatenbank laufen lassen.
+3. In **MongoDB Atlas → Network Access** die Deployment-Umgebung freigeben.
+4. `BETTER_AUTH_URL` auf **genau die Origin** setzen, die der Browser sieht.
+   Leitet die Apex-Domain auf `www` weiter, muss hier `www` stehen — sonst
+   passen OAuth-Redirect und Cookie-Origin nicht zusammen.
+5. Die OAuth-Redirect-URLs bei Discord und Twitch auf
+   `<BETTER_AUTH_URL>/api/auth/callback/<provider>` setzen.
+6. Startinhalte einspielen: entweder `npm run seed` von einem Rechner mit
+   Datenbankzugang, oder `SEED_SECRET` setzen und einmal
+   `POST /api/admin/seed` mit `Authorization: Bearer <SEED_SECRET>` aufrufen.
+   Danach `SEED_SECRET` wieder entfernen — ohne die Variable antwortet die
+   Route 404. Der Seed ist idempotent.
+
+### Passkeys und die Domain
+
+Die WebAuthn-Bindung (`rpID`) leitet sich aus `BETTER_AUTH_URL` ab. Ein auf
+`www.jannikjbi.de` registrierter Passkey funktioniert deshalb **nicht** auf
+`jannikjbi.de` ohne `www`. Wird die Weiterleitung später auf die Apex-Domain
+umgedreht, muss `BETTER_AUTH_URL` mitgezogen und der Passkey neu registriert
+werden. Passkeys erst anlegen, wenn die Domain final steht.
 
 ---
 
 ## Offene Punkte
 
-* **Hosting-Anbieter in der Datenschutzerklärung.** `/datenschutz` enthält an
-  der entsprechenden Stelle einen sichtbaren Hinweis; Name, Sitz und
-  Speicherdauer der Server-Logfiles müssen dort noch ergänzt werden. Alle
-  übrigen Angaben beschreiben ausschließlich, was der Code tatsächlich tut.
+* **Speicherdauer der Server-Logfiles.** `/datenschutz` nennt Vercel als Hoster
+  samt Rechtsgrundlage für die Drittlandsübermittlung. Die konkrete
+  Aufbewahrungsdauer der Zugriffs-Logs steht dort noch nicht und sollte anhand
+  der Vercel-Einstellungen ergänzt werden. Alle übrigen Angaben beschreiben
+  ausschließlich, was der Code tatsächlich tut.
 * **Media-Bibliothek.** Bilder werden aktuell als URL plus Alt-Text gepflegt.
   Das Feld ist bereits ein eingebettetes Objekt, ein späterer Upload-Dienst
   lässt sich also ohne Migration ergänzen.
