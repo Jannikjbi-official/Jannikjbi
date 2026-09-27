@@ -24,6 +24,40 @@ export class NotionError extends Error {
   }
 }
 
+/**
+ * Turns a Notion API error into something the CMS can act on.
+ *
+ * Notion's own wording is accurate but English and passive ("Make sure the
+ * relevant pages ... are shared"). The most common failure by far is a database
+ * that simply has not been shared with the integration yet, so that case names
+ * the actual next step instead.
+ *
+ * Never contains a token or any other secret.
+ */
+export function notionMessage(error: NotionError): string {
+  switch (error.code) {
+    case "object_not_found":
+      return "Diese Datenbank ist für die Integration nicht sichtbar. Teile die Seite „Creator Buddy Dashboard“ in Notion mit der Integration – oder prüfe, ob die Datenbank-ID stimmt.";
+    case "unauthorized":
+      return "Notion hat den Zugriff abgelehnt. Bitte NOTION_TOKEN prüfen.";
+    case "restricted_resource":
+      return "Die Integration darf auf diese Datenbank nicht zugreifen.";
+    case "rate_limited":
+      return "Notion hat zu viele Anfragen erhalten. Bitte kurz warten und erneut versuchen.";
+    case "validation_error":
+      return `Notion hat die Eingabe abgelehnt: ${error.message}`;
+    case "not_configured":
+      return error.message;
+    default:
+      return `Notion: ${error.message}`;
+  }
+}
+
+/** True when a failure is "the integration cannot see this database". */
+export function isNotSharedError(error: unknown): boolean {
+  return error instanceof NotionError && error.code === "object_not_found";
+}
+
 export function isNotionConfigured(): boolean {
   return Boolean(process.env.NOTION_TOKEN?.trim());
 }

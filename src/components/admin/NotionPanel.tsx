@@ -30,6 +30,7 @@ type DatabaseStatus = {
   id: string | null;
   title: string | null;
   error: string | null;
+  notShared: boolean;
 };
 
 type NotionStatus = {
@@ -205,6 +206,48 @@ export function NotionPanel({
               und hinterlege das Secret als Umgebungsvariable{" "}
               <span className="font-mono text-ink-200">NOTION_TOKEN</span>.
             </p>
+          </div>
+        </div>
+      ) : null}
+
+      {status.tokenConfigured && status.databases.some((entry) => entry.notShared) ? (
+        <div className="flex gap-4 rounded-xl border border-gold-500/30 bg-gold-500/5 p-5">
+          <FontAwesomeIcon
+            icon={faTriangleExclamation}
+            className="mt-0.5 size-4 shrink-0 text-gold-500"
+            aria-hidden
+          />
+          <div className="text-sm leading-relaxed text-ink-300">
+            <p className="font-semibold text-ink-100">
+              Die Integration sieht deine Datenbanken noch nicht.
+            </p>
+            <p className="mt-1.5">
+              Der Token ist gültig, aber in Notion ist noch nichts für ihn freigegeben. Eine
+              Integration bekommt Zugriff erst, wenn du sie ausdrücklich zu einer Seite
+              einlädst – die Datenbank-IDs allein genügen nicht.
+            </p>
+            <ol className="mt-3 list-decimal space-y-1.5 pl-5">
+              <li>
+                In Notion die Seite{" "}
+                <span className="text-ink-200">„Creator Buddy Dashboard“</span> öffnen.
+              </li>
+              <li>
+                Oben rechts auf <span className="text-ink-200">···</span> klicken.
+              </li>
+              <li>
+                <span className="text-ink-200">Verbindungen</span> wählen und die Integration
+                hinzufügen.
+              </li>
+              <li>Hier auf „Erneut prüfen“ klicken.</li>
+            </ol>
+            <p className="mt-3 text-xs text-ink-500">
+              Die Freigabe vererbt sich auf alle Unterseiten, also auf Content DB, Kanäle,
+              Sponsoren und Aufgaben zugleich.
+            </p>
+            <Button variant="outline" size="sm" className="mt-4" onPress={() => router.refresh()}>
+              <FontAwesomeIcon icon={faRotate} className="size-3.5" aria-hidden />
+              Erneut prüfen
+            </Button>
           </div>
         </div>
       ) : null}

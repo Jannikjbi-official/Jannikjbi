@@ -13,7 +13,9 @@ import { getSiteSettingsForAdmin } from "@/server/content/settings";
 import {
   NotionError,
   createPage,
+  isNotSharedError,
   isNotionConfigured,
+  notionMessage,
   queryDatabase,
   retrieveDatabase,
   updatePage,
@@ -123,7 +125,7 @@ export async function runSync(only?: NotionResource[]): Promise<SyncReport> {
         skipped: [],
         error:
           error instanceof NotionError
-            ? `Notion: ${error.message}`
+            ? notionMessage(error)
             : "Die Synchronisierung ist fehlgeschlagen.",
       });
     }
@@ -391,6 +393,8 @@ export type NotionStatus = {
     id: string | null;
     title: string | null;
     error: string | null;
+    /** The database exists but has not been shared with the integration. */
+    notShared: boolean;
   }>;
 };
 
@@ -408,12 +412,12 @@ export async function getNotionStatus(): Promise<NotionStatus> {
   const databases = await Promise.all(
     entries.map(async ({ resource, id }) => {
       if (!tokenConfigured || !id) {
-        return { resource, id, title: null, error: null };
+        return { resource, id, title: null, error: null, notShared: false };
       }
 
       try {
         const database = await retrieveDatabase(id);
-        return { resource, id, title: database.title, error: null };
+        return { resource, id, title: database.title, error: null, notShared: false };
       } catch (error) {
         return {
           resource,
@@ -421,8 +425,9 @@ export async function getNotionStatus(): Promise<NotionStatus> {
           title: null,
           error:
             error instanceof NotionError
-              ? error.message
+              ? notionMessage(error)
               : "Die Datenbank konnte nicht gelesen werden.",
+          notShared: isNotSharedError(error),
         };
       }
     }),

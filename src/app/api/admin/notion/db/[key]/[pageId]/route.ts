@@ -2,12 +2,10 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { NOTION_DB_KEYS, type NotionDbKey } from "@/lib/notion-manage-types";
-import { NotionError } from "@/server/notion/client";
+import { NotionError, notionMessage } from "@/server/notion/client";
 import { archiveRow, updateRow } from "@/server/notion/manage";
 import { requireAdminApi } from "@/server/auth/guard";
 import { badRequest, ok, parseBody, serverError } from "@/server/api/respond";
-
-import { notionMessage } from "../route";
 
 export const dynamic = "force-dynamic";
 
